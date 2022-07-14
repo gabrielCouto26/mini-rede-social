@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  nodejs:
+    container_name: api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - 4000:4000
+    volumes:
+      - '.:/app'
+    command: npm start
+    restart: always
+    depends_on:
+      - postgresql
+
+  postgresql:
+    container_name: database
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file: .env
+    restart: always
+    volumes:
+      - ./database/data/:/var/lib/postgresql/data/
