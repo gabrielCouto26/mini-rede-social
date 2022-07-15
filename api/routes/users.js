@@ -26,7 +26,7 @@ router.post('/', async function(req, res, next) {
 router.put('/:id', async function(req, res, next) {
   const newUser = req.body
   const user = await UserService.updateUser(req.params.id, newUser)
-  res.status(200).json({ok: true});
+  res.status(200).json(user);
 });
 
 /* DELETE */

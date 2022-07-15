@@ -5,7 +5,7 @@ const UserRepository = {
     return database.query('SELECT * FROM mini.users');
   },
   getById(id){
-    return database.one('SELECT * FROM mini.users WHERE id=$1', [id])
+    return database.oneOrNone('SELECT * FROM mini.users WHERE id=$1', [id])
   },
   getByName(name){
     return database.one('SELECT name FROM mini.users WHERE name=$1', [name])
