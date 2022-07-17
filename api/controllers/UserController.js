@@ -34,6 +34,16 @@ const UserController = {
     const { id } = req.params
     await UserService.delete(id)
     res.status(200).json({id});
+  },
+  async follow(req, res){
+    const { user_id, id } = req.params
+    await UserService.follow(user_id, id)
+    res.status(204).send();
+  },
+  async unfollow(req, res){
+    const { user_id, id } = req.params
+    await UserService.unfollow(user_id, id)
+    res.status(204).send();
   }
 }
 
