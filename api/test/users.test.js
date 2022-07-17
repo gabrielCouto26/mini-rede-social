@@ -1,9 +1,12 @@
 const request = require('supertest')
 
-const app = require('../app')
+const app = require('../app');
+const User = require('../models/User');
 const UserService = require('../services/UserService')
 
 describe('User', () => {
+  async () => await User.destroy({ truncate: true, force: true })
+
   it('Should get all', async function(){
     const response = await request(app).get('/users')
     expect(response.status).toBe(200);
@@ -32,4 +35,9 @@ describe('User', () => {
     const response = await request(app).delete(`/users/${user.id}`)
     expect(response.status).toBe(200)
   })
+
+  // it('Should follow other user', async function(){
+  //   const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+
+  // })
 })

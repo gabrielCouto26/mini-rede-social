@@ -20,8 +20,7 @@ services:
     container_name: database
     image: postgres
     ports:
-      - "5432:5432"
-    env_file: .env
+      - 5432:5432
     restart: always
     volumes:
       - ./database/data/:/var/lib/postgresql/data/

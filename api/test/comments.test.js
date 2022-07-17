@@ -4,8 +4,11 @@ const app = require('../app')
 const UserService = require('../services/UserService')
 const PostService = require('../services/PostService')
 const CommentService = require('../services/CommentService')
+const Comment = require('../models/Comment')
 
 describe('Comment', () => {
+  async () => await Comment.destroy({ truncate: true, force: true })
+
   it('Should get comments by post', async function(){
     const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })

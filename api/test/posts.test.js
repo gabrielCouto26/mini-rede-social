@@ -3,8 +3,11 @@ const request = require('supertest')
 const app = require('../app')
 const UserService = require('../services/UserService')
 const PostService = require('../services/PostService')
+const Post = require('../models/Post')
 
 describe('Post', () => {
+  async () => await Post.destroy({ truncate: true, force: true })
+
   it('Should get posts by user', async function(){
     const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
     const response = await request(app).get(`/users/${user.id}/posts`)

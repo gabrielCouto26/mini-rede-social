@@ -18,6 +18,9 @@ const UserService = {
   },
   async delete(id){
     return await User.destroy({where: { id }});
+  },
+  async follow(id, follower_id){
+    return await User.update()
   }
 }
 

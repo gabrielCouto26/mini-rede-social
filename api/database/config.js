@@ -1,10 +1,10 @@
 module.exports = {
   dialect: 'postgres',
-  database: process.env.POSTGRES_DB       || 'mini_rede_social',
-  username: process.env.POSTGRES_USER     || 'root',
-  password: process.env.POSTGRES_PASSWORD || 'root',
-  host:     process.env.POSTGRES_HOST     || 'localhost',
-  port:     process.env.POSTGRES_PORT     || 5432,
+  database: process.env.POSTGRES_DB,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  host:     process.env.POSTGRES_HOST,
+  port:     process.env.POSTGRES_PORT,
   define: {
     timestamps: true,
     underscored: true
