@@ -1,32 +1,35 @@
-const axios = require('axios')
-const baseUrl = 'http://localhost:4000'
+const request = require('supertest')
 
-const UserService = require('../services/users')
+const app = require('../app')
+const UserService = require('../services/UserService')
 
-const request = function(method, endpoint, data) {
-  return axios({url: `${baseUrl}/${endpoint}`, method, data})
-}
+describe('User', () => {
+  it('Should get all', async function(){
+    const response = await request(app).get('/users')
+    expect(response.status).toBe(200);
+  })
+  
+  it('Should create', async function(){
+    const newUser = { name: 'Gabriel', email: 'gabriel@email.com'}
+    const response = await request(app).post('/users').send(newUser)
+    const user = await UserService.findByEmail(newUser.email)
 
-test('Should get users', async function(){
-  const { data } = await request('get', 'users')
-  expect(data).toHaveLength(0)
-})
+    expect(response.status).toBe(204)
+    expect(user.name).toBe(newUser.name)
+  })
+  
+  it('Should update', async function(){
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    await request(app).put(`/users/${user.id}`).send({ name: 'Alfredo' })
+  
+    const updated = await UserService.findOne(user.id)
+    expect(updated.name).toBe('Alfredo')
 
-test('Should create and delete user', async function(){
-  const user = { name: 'Gabriel', date: new Date()}
-  const { data } = await request('post', 'users', user)
+  })
 
-  expect(data.name).toBe(user.name)
-
-  await UserService.deleteUser(data.id)
-})
-
-test.only('Should update user', async function(){
-  const user = await UserService.createUser({ name: 'Gabriel', date: new Date()})
-  await request('put', `users/${user.id}`, { name: 'Alfredo' })
-
-  const updated = await UserService.getUserById(user.id)
-  expect(updated.name).toBe('Alfredo')
-
-  await UserService.deleteUser(user.id)
+  it('Should delete', async function(){
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const response = await request(app).delete(`/users/${user.id}`)
+    expect(response.status).toBe(200)
+  })
 })
