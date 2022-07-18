@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const AuthController    = require('./controllers/AuthController');
 const UserController    = require('./controllers/UserController');
 const PostController    = require('./controllers/PostController');
 const CommentController = require('./controllers/CommentController');
@@ -8,11 +9,15 @@ const FollowController  = require('./controllers/FollowController');
 const LikeController    = require('./controllers/LikeController');
 
 
+// Auth
+router.post('/register', AuthController.register);
+router.post('/login',    AuthController.login);
+
+// Home
 // router.get('/', HomeController.index);
 
 // Users
 router.get(   '/users/',    UserController.index);
-router.post(  '/users/',    UserController.create);
 router.get(   '/users/:id', UserController.show);
 router.put(   '/users/:id', UserController.update);
 router.delete('/users/:id', UserController.delete);

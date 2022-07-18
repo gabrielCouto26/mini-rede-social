@@ -14,11 +14,6 @@ const UserController = {
     
     res.status(200).json(user);
   },
-  async create(req, res){
-    const { name, email } = req.body
-    await UserService.create({ name, email })
-    res.status(204).send();
-  },
   async update(req, res){
     const { id } = req.params
     const { name, email } = req.body

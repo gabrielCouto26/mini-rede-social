@@ -1,17 +1,14 @@
 const request = require('supertest')
 
 const app = require('../app')
-const Comment = require('../models/Comment')
 const UserService = require('../services/UserService')
 const PostService = require('../services/PostService')
 const CommentService = require('../services/CommentService')
 const LikeService = require('../services/LikeService')
 
 describe('Comment', () => {
-  async () => await Comment.destroy({ truncate: true, force: true })
-
   it('Should get comments by post', async function(){
-    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
+    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const response = await request(app).get(`/users/${user.id}/posts/${post.id}/comments`)
 
@@ -19,7 +16,7 @@ describe('Comment', () => {
   })
   
   it('Should create', async function(){
-    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
+    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const newComment = { content: 'comentario' }
     const response = await request(app)
@@ -32,7 +29,7 @@ describe('Comment', () => {
   })
   
   it('Should update', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const newComment = { content: 'novo comentario' }
     const comment = await CommentService.create(user.id, post.id, newComment)
@@ -45,7 +42,7 @@ describe('Comment', () => {
   })
 
   it('Should delete', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const comment = await CommentService.create(user.id, post.id, { content: 'comentario' })
     const response = await request(app).delete(`/users/${user.id}/posts/${post.id}/comments/${comment.id}`)
@@ -54,7 +51,7 @@ describe('Comment', () => {
   })
 
   it('Should receive likes', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const comment = await CommentService.create(user.id, post.id, { content: 'comentario' })
     const response = await request(app).post(`/comments/${comment.id}/like/${user.id}`)
@@ -66,7 +63,7 @@ describe('Comment', () => {
   })
 
   it('Should receive unlikes', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const comment = await CommentService.create(user.id, post.id, { content: 'comentario' })
     await LikeService.likeComment(user.id, comment.id)

@@ -1,29 +1,24 @@
 const request = require('supertest')
 
 const app = require('../app');
-const User = require('../models/User');
 const UserService = require('../services/UserService')
 const FollowService = require('../services/FollowService')
 
 describe('User', () => {
-  async () => await User.destroy({ truncate: true, force: true })
-
   it('Should get all', async function(){
     const response = await request(app).get('/users')
     expect(response.status).toBe(200);
   })
   
   it('Should create', async function(){
-    const newUser = { name: 'Gabriel', email: 'gabriel@email.com'}
-    const response = await request(app).post('/users').send(newUser)
-    const user = await UserService.findByEmail(newUser.email)
+    const userHash = { name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' }
+    const user = await UserService.create(userHash)
 
-    expect(response.status).toBe(204)
-    expect(user.name).toBe(newUser.name)
+    expect(userHash.name).toBe(user.name)
   })
   
   it('Should update', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     await request(app).put(`/users/${user.id}`).send({ name: 'Alfredo' })
   
     const updated = await UserService.findOne(user.id)
@@ -32,14 +27,14 @@ describe('User', () => {
   })
 
   it('Should delete', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const response = await request(app).delete(`/users/${user.id}`)
     expect(response.status).toBe(200)
   })
 
   it('Should follow other user', async function(){
-    const user1 = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
-    const user2 = await UserService.create({ name: 'Alfredo', email: 'alfredo@email.com'})
+    const user1 = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
+    const user2 = await UserService.create({ name: 'Alfredo', email: 'alfredo@email.com', password_hash: '1234' })
 
     const response = await request(app).post(`/users/${user1.id}/follow/${user2.id}`)
     const updateUser1 = await UserService.findOne(user1.id)
@@ -51,8 +46,8 @@ describe('User', () => {
   })
 
   it('Should unfollow other user', async function(){
-    const user1 = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
-    const user2 = await UserService.create({ name: 'Alfredo', email: 'alfredo@email.com'})
+    const user1 = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
+    const user2 = await UserService.create({ name: 'Alfredo', email: 'alfredo@email.com', password_hash: '1234' })
     await FollowService.follow(user1.id, user2.id)
 
     const response = await request(app).post(`/users/${user1.id}/unfollow/${user2.id}`)

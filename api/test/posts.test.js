@@ -1,23 +1,20 @@
 const request = require('supertest')
 
 const app = require('../app')
-const Post = require('../models/Post')
 const UserService = require('../services/UserService')
 const PostService = require('../services/PostService')
 const LikeService = require('../services/LikeService')
 
 describe('Post', () => {
-  async () => await Post.destroy({ truncate: true, force: true })
-
   it('Should get posts by user', async function(){
-    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
+    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com', password_hash: '1234' })
     const response = await request(app).get(`/users/${user.id}/posts`)
 
     expect(response.status).toBe(200);
   })
   
   it('Should create', async function(){
-    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com'})
+    const user = await UserService.create({ name: 'Teste', email: 'teste@email.com', password_hash: '1234' })
     const newPost = { title: 'titulo', content: 'conteudo' }
     const response = await request(app).post(`/users/${user.id}/posts`).send(newPost)
     const [ post ] = await PostService.findAllByUser(user.id)
@@ -27,7 +24,7 @@ describe('Post', () => {
   })
   
   it('Should update', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const newPost = { title: 'novo titulo', content: 'conteudo' }
     await request(app).put(`/users/${user.id}/posts/${post.id}`).send(newPost)
@@ -37,7 +34,7 @@ describe('Post', () => {
   })
 
   it('Should delete', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const response = await request(app).delete(`/users/${user.id}/posts/${post.id}`)
 
@@ -45,7 +42,7 @@ describe('Post', () => {
   })
 
   it('Should receive likes', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     const response = await request(app).post(`/posts/${post.id}/like/${user.id}`)
 
@@ -56,7 +53,7 @@ describe('Post', () => {
   })
 
   it('Should receive unlikes', async function(){
-    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com', password_hash: '1234' })
     const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
     await LikeService.likePost(user.id, post.id)
 

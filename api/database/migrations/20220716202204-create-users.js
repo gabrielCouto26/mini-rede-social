@@ -19,6 +19,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      password_hash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       followers: DataTypes.ARRAY(DataTypes.INTEGER),
       following: DataTypes.ARRAY(DataTypes.INTEGER),
       created_at: {
