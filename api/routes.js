@@ -4,7 +4,8 @@ const router = express.Router();
 const UserController    = require('./controllers/UserController');
 const PostController    = require('./controllers/PostController');
 const CommentController = require('./controllers/CommentController');
-const FollowController = require('./controllers/FollowController');
+const FollowController  = require('./controllers/FollowController');
+const LikeController    = require('./controllers/LikeController');
 
 
 // router.get('/', HomeController.index);
@@ -32,5 +33,11 @@ router.delete('/users/:user_id/posts/:post_id/comments/:id', CommentController.d
 // Follow
 router.post('/users/:user_id/follow/:id',   FollowController.follow);
 router.post('/users/:user_id/unfollow/:id', FollowController.unfollow);
+
+// Like
+router.post('/posts/:post_id/like/:user_id',         LikeController.likePost);
+router.post('/posts/:post_id/unlike/:user_id',       LikeController.unlikePost);
+router.post('/comments/:comment_id/like/:user_id',   LikeController.likeComment);
+router.post('/comments/:comment_id/unlike/:user_id', LikeController.unlikeComment);
 
 module.exports = router;

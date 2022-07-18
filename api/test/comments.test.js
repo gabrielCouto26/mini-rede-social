@@ -1,10 +1,11 @@
 const request = require('supertest')
 
 const app = require('../app')
+const Comment = require('../models/Comment')
 const UserService = require('../services/UserService')
 const PostService = require('../services/PostService')
 const CommentService = require('../services/CommentService')
-const Comment = require('../models/Comment')
+const LikeService = require('../services/LikeService')
 
 describe('Comment', () => {
   async () => await Comment.destroy({ truncate: true, force: true })
@@ -50,5 +51,30 @@ describe('Comment', () => {
     const response = await request(app).delete(`/users/${user.id}/posts/${post.id}/comments/${comment.id}`)
 
     expect(response.status).toBe(200)
+  })
+
+  it('Should receive likes', async function(){
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
+    const comment = await CommentService.create(user.id, post.id, { content: 'comentario' })
+    const response = await request(app).post(`/comments/${comment.id}/like/${user.id}`)
+
+    const updatedComment = await CommentService.findOneByPost(user.id, post.id, comment.id)
+
+    expect(response.status).toBe(204)
+    expect(updatedComment.likes).toHaveLength(1)
+  })
+
+  it('Should receive unlikes', async function(){
+    const user = await UserService.create({ name: 'Gabriel', email: 'gabriel@email.com'})
+    const post = await PostService.create(user.id, { title: 'titulo', content: 'conteudo' })
+    const comment = await CommentService.create(user.id, post.id, { content: 'comentario' })
+    await LikeService.likeComment(user.id, comment.id)
+
+    const response = await request(app).post(`/comments/${comment.id}/unlike/${user.id}`)
+    const updatedComment = await CommentService.findOneByPost(user.id, post.id, comment.id)
+
+    expect(response.status).toBe(204)
+    expect(updatedComment.likes).toHaveLength(0)
   })
 })
