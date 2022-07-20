@@ -7,7 +7,7 @@ const UserController = {
   },
   async show(req, res){
     const { id } = req.params
-    const user = await UserService.findOne(id)
+    const user = await UserService.findOneFull(id)
     
     if(!user)
       return res.status(400).json({error: 'Usuário não encontrado'})

@@ -13,18 +13,23 @@ const UserService = {
     const user = await User.findOne({ where: { id } });
     const userToFollow = await User.findOne({ where: { id: following_id } });
     
-    await user.update({ following: [...user.following || [], following_id] });
-    await userToFollow.update({ followers: [...userToFollow.followers || [], id] });
+    if((user.following || []).indexOf(following_id) == -1){
+      await user.update({ following: [...user.following || [], following_id] });
+      await userToFollow.update({ followers: [...userToFollow.followers || [], id] });
+    }
   },
   async unfollow(id, following_id){
     const user = await User.findOne({ where: { id } });
     const userToUnfollow = await User.findOne({ where: { id: following_id } });
 
-    const following = user.following.filter(following => following != following_id);
-    const followers = userToUnfollow.followers.filter(follower => follower != id);
+    if((user.following || []).indexOf(following_id)){
+      const following = user.following.filter(following => following != following_id);
+      const followers = userToUnfollow.followers.filter(follower => follower != id);
+  
+      await user.update({ following });
+      await userToUnfollow.update({ followers });
 
-    await user.update({ following });
-    await userToUnfollow.update({ followers });
+    }
   }  
 }
 

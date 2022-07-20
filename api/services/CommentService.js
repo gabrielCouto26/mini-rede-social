@@ -1,4 +1,5 @@
 const Comment = require('../models/Comment');
+const UserService = require('../services/UserService')
 
 const CommentService = {
   async findAll(){
@@ -8,7 +9,18 @@ const CommentService = {
     return Comment.findOne({where: { user_id, post_id, id }});
   },
   async findAllByPost(post_id){
-    return Comment.findAll({where: { post_id }});
+    const comments = await Comment.findAll({where: { post_id }});
+    const commentsWithUser = Promise.all(comments.map(async (comment) => {
+      const { id, name } = await UserService.findOne(comment.user_id);
+      return {
+        id:      comment.id,
+        user:    { id, name },
+        content: comment.content,
+        likes:   comment.likes
+      }
+    }))
+
+    return commentsWithUser;
   },
   async findOneByPost(user_id, post_id, id){
     return Comment.findOne({where: { user_id, post_id, id }});

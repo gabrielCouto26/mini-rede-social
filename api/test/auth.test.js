@@ -40,7 +40,7 @@ describe('Auth', () => {
     await AuthService.register('Gabriel', login.email, login.password)
     const response = await request(app).post('/login').send(login)
 
-    expect(response.status).toBe(204)
+    expect(response.status).toBe(200)
   })
 
   it('Should not login user if user is not registered', async function(){

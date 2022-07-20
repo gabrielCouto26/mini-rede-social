@@ -2,8 +2,8 @@ const CommentService = require('../services/CommentService')
 
 const CommentController = {
   async index(req, res){
-    const { user_id, post_id } =  req.params
-    const comments = await CommentService.findAllByPost(user_id, post_id);
+    const { post_id } =  req.params
+    const comments = await CommentService.findAllByPost(post_id);
     res.status(200).json(comments);
   },
   async create(req, res){

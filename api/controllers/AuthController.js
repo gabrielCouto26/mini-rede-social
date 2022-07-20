@@ -21,9 +21,9 @@ const AuthController = {
 
     const success = await AuthService.login(email, password);
     if(success)
-      return res.status(204).send();
+      return res.status(200).json({ user_id: user.id });
     else
-      return res.status(400).json({ msg: 'Senha incorreta.' });
+      return res.status(400).json({ user_id: 0 });
   }
 }
 

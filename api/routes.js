@@ -7,6 +7,7 @@ const PostController    = require('./controllers/PostController');
 const CommentController = require('./controllers/CommentController');
 const FollowController  = require('./controllers/FollowController');
 const LikeController    = require('./controllers/LikeController');
+const HomeController    = require('./controllers/HomeController');
 
 
 // Auth
@@ -14,7 +15,7 @@ router.post('/register', AuthController.register);
 router.post('/login',    AuthController.login);
 
 // Home
-// router.get('/', HomeController.index);
+router.get('/home/:user_id', HomeController.index);
 
 // Users
 router.get(   '/users/',    UserController.index);
