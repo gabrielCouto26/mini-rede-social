@@ -5,17 +5,17 @@ Na raíz do projeto:
 
 ## Rodando o projeto
 
-1. Crie um arquivo *.env*. Veja um exemplo na sessão *Arquivo .env*.
+1. Crie um arquivo *.env*. Veja um exemplo na sessão *Variáveis de ambiente*.
 2. Suba a aplicação: `docker-compose up`
 3. Entre no container: `docker exec -it api bash`
 4. Crie o banco: `npx sequelize db:create`
 5. Rode as migrations: `npx sequelize db:migrate`
-6. Para encerrar, interrompa a aplicação: `CTRL+C e docker-compose down, em seguida.`
+6. Para encerrar, interrompa a aplicação: `CTRL+C` e `docker-compose down`, em seguida.
 
 Talvez seja necessário adicionar permissão para a pasta `database/data`. 
 Para isso, execute o comando `sudo chown -R $USER:$USER database/data` fora do container.
 
-## Ambiente de teste
+## Configurando de teste
 
 1. Com a aplicação rodando, entre no container: `docker exec -it api bash`
 2. Configure o banco de teste: `export POSTGRES_DB=test`
@@ -23,8 +23,11 @@ Para isso, execute o comando `sudo chown -R $USER:$USER database/data` fora do c
 4. Rode as migrations: `npx sequelize db:migrate`
 5. Rode os testes: `npm test`
 
+## Rodando os testes
+1. Com a aplicação rodando, entre no container: `docker exec -it api bash`
+2. Rode os testes: `npm test`
 
-## Arquivo .env
+## Variáveis de ambiente
 Exemplo:
 - NODE_ENV=development
 - PORT=4000
