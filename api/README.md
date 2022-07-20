@@ -5,7 +5,7 @@ Na raíz do projeto:
 
 ## Rodando o projeto
 
-1. Crie um arquivo *.env*. Veja um exemplo na sessão *Variáveis de ambiente*.
+1. Crie um arquivo *.env*. Veja quais variáveis utilizar na sessão *Variáveis de ambiente*.
 2. Suba a aplicação: `docker-compose up`
 3. Entre no container: `docker exec -it api bash`
 4. Crie o banco: `npx sequelize db:create`
@@ -28,7 +28,6 @@ Para isso, execute o comando `sudo chown -R $USER:$USER database/data` fora do c
 2. Rode os testes: `npm test`
 
 ## Variáveis de ambiente
-Exemplo:
 - NODE_ENV=development
 - PORT=4000
 - POSTGRES_DB=
